@@ -1,11 +1,11 @@
 name: Build macOS App
 on:
   push:
-    branches: [ main ] # Se activa cada vez que subes cambios a main
+    branches: [ main ]
 
 jobs:
   package:
-    runs-on: macos-latest # GitHub te asigna una Mac virtual
+    runs-on: macos-latest
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
@@ -15,16 +15,18 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: 'gradle' # ⚡ Esto acelera las futuras subidas
 
       - name: Dar permisos al ejecutable de Gradle
         run: chmod +x gradlew
 
       - name: Crear instalador DMG
-        # Este comando genera el archivo .dmg nativo de Mac
-        run: ./gradlew :composeApp:packageDmg
+        # ⚠️ Si tu módulo no se llama 'composeApp', cambia el nombre aquí abajo
+        run: ./gradlew packageDmg
 
       - name: Guardar el instalador como artefacto
         uses: actions/upload-artifact@v4
         with:
-          name: App-Mac-Instalador
-          path: composeApp/build/compose/binaries/main/dmg/*.dmg
+          name: CC3D-Mac-Installer
+          # Usamos una ruta más flexible para encontrar el DMG
+          path: "**/build/compose/binaries/main/dmg/*.dmg"

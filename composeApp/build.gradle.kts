@@ -115,8 +115,15 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "com.jaco.cc3d"
+            packageName = "CC3D-App" // <-- Nombre para el archivo .dmg y la App
             packageVersion = "1.0.0"
+
+            macOS {
+                bundleID = "com.jaco.cc3d" // <-- Este se queda como identificador único
+                dockName = "CC3D"
+            }
+            //packageName = "com.jaco.cc3d"
+            //packageVersion = "1.0.0"
         }
     }
 }
