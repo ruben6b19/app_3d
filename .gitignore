@@ -1,0 +1,19 @@
+# Gradle
+.gradle/
+build/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+.idea/libraries/
+
+# macOS (Útil si vas a empaquetar para Mac)
+.DS_Store
+
+# Local configuration
+local.properties
+.env
+
+# Cache de archivos
+.cache/
