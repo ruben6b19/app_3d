@@ -1,0 +1,30 @@
+name: Build macOS App
+on:
+  push:
+    branches: [ main ] # Se activa cada vez que subes cambios a main
+
+jobs:
+  package:
+    runs-on: macos-latest # GitHub te asigna una Mac virtual
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Dar permisos al ejecutable de Gradle
+        run: chmod +x gradlew
+
+      - name: Crear instalador DMG
+        # Este comando genera el archivo .dmg nativo de Mac
+        run: ./gradlew :composeApp:packageDmg
+
+      - name: Guardar el instalador como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: App-Mac-Instalador
+          path: composeApp/build/compose/binaries/main/dmg/*.dmg
