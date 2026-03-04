@@ -11,6 +11,7 @@ import com.jaco.cc3d.data.network.Connection
 import com.jaco.cc3d.data.local.cache.FileCacheManager
 import com.jaco.cc3d.domain.models.Course
 import com.jaco.cc3d.domain.models.QuizTemplate
+import com.jaco.cc3d.domain.models.ScheduledQuiz
 import com.jaco.cc3d.domain.models.ScheduledQuizDomainRequest
 import com.jaco.cc3d.domain.models.User
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +23,7 @@ import com.jaco.cc3d.domain.usecases.bible.GetVerseUseCase
 import com.jaco.cc3d.domain.usecases.course.GetCourseById
 import com.jaco.cc3d.domain.usecases.quizTemplate.GetAllQuizTemplates
 import com.jaco.cc3d.domain.usecases.scheduleQuiz.ScheduleQuiz
+import com.jaco.cc3d.presentation.privado.teacherDashboard.teacherDisplay.manager.currentScheduledQuizState
 import com.jaco.cc3d.presentation.privado.teacherDashboard.teacherDisplay.models.SlideContent
 import com.jaco.cc3d.presentation.privado.teacherDashboard.teacherDisplay.util.DisplayResources
 import com.jaco.cc3d.presentation.privado.teacherDashboard.teacherDisplay.util.parseMarkdownToIncrementalSlides
@@ -93,6 +95,9 @@ class TeacherDisplayViewModel @Inject constructor(
 
     private val _slides = MutableStateFlow<List<SlideContent>>(emptyList())
     val slides: StateFlow<List<SlideContent>> = _slides
+
+    private val _currentScheduledQuiz = MutableStateFlow<ScheduledQuiz?>(null)
+    val currentScheduledQuiz: StateFlow<ScheduledQuiz?> = _currentScheduledQuiz
 
     // 🔑 Estado para controlar la visibilidad del editor/visor de Markdown
     private val _isMarkdownEditorOpen = MutableStateFlow(false)
@@ -392,6 +397,8 @@ class TeacherDisplayViewModel @Inject constructor(
 
             // 2. Invocamos el Use Case
             scheduleQuiz(request).onSuccess { scheduledQuiz ->
+                _currentScheduledQuiz.value = scheduledQuiz
+                currentScheduledQuizState.value = scheduledQuiz
                 println("Examen programado con éxito: ${scheduledQuiz.id}")
                 // Podrías añadir lógica aquí para refrescar una lista de "quizzes próximos"
                 onSuccess()

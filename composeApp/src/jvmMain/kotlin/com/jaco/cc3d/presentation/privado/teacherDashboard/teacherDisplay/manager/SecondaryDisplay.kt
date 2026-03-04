@@ -27,6 +27,8 @@ import javax.swing.SwingUtilities
 import androidx.compose.ui.input.key.*
 import com.jaco.cc3d.common.AppConfig
 import com.jaco.cc3d.data.local.preferences.SettingsManager
+import com.jaco.cc3d.data.network.Connection
+import com.jaco.cc3d.domain.models.ScheduledQuiz
 import com.jaco.cc3d.presentation.privado.teacherDashboard.teacherDisplay.util.BibleDisplayStrings
 import com.jaco.cc3d.presentation.privado.teacherDashboard.teacherDisplay.util.DisplayResources
 import java.awt.event.WindowAdapter
@@ -50,9 +52,12 @@ val showSecondaryWindowsState = mutableStateOf(false)
 val bibleTextsState = mutableStateOf<BibleDisplayStrings?>(null)
 val controlsVisibleState = mutableStateOf(true)
 val showCustomWindowState = mutableStateOf(false)
-val connectedUsersState = mutableStateOf<List<com.jaco.cc3d.data.network.Connection>>(emptyList())
 
+val connectedUsersState = mutableStateOf<List<Connection>>(emptyList())
 val connectedUsers by connectedUsersState
+
+val currentScheduledQuizState = mutableStateOf<ScheduledQuiz?>(null)
+val currentScheduledQuiz by currentScheduledQuizState
 
 fun toggleCustomWindow(show: Boolean) {
     showCustomWindowState.value = show
@@ -142,7 +147,8 @@ fun createDisplayWindowOnScreen(screen: GraphicsDevice, onFetchVerseContent: sus
                     currentBibleFontSize = currentBibleFontSize,
                     selectedBibleId = currentBibleId,
                     texts = bibleTexts ?: DisplayResources.get("es").bible,
-                    users = connectedUsers
+                    users = connectedUsers,
+                    quiz = currentScheduledQuiz
                     //currentCitation = citationToShow
                 )
             }

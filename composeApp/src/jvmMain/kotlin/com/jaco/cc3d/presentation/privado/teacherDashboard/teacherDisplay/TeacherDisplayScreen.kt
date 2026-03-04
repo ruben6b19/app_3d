@@ -121,7 +121,7 @@ fun TeacherDisplayScreen(
     var currentSlideIndex by currentSlideIndexState
     var currentSlide by currentSlideState
     var controlsVisible by controlsVisibleState
-    val showCustomWindow by showCustomWindowState
+    var showCustomWindow by showCustomWindowState
 
     // 5. CONSTANTES Y CONFIGURACIÓN DE VISTA
     val availableBibles = remember { bibleFileManager.getAvailableBibleIds() }
@@ -136,6 +136,7 @@ fun TeacherDisplayScreen(
     val isParsing by viewModel.isParsing.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val connectedUsers by viewModel.currentUsers
+    val currentQuiz by viewModel.currentScheduledQuiz.collectAsState()
 
     // 6. LÓGICA DE DIAPOSITIVAS (DERIVADA)
     val prevSlide = slides.getOrNull(currentSlideIndex - 1)
@@ -788,7 +789,16 @@ fun TeacherDisplayScreen(
                                 modifier = Modifier.fillMaxSize(),
                                 contentAlignment = Alignment.CenterEnd // Misma posición que la biblia
                             ) {
-                                CustomEmptyOverlay(users = connectedUsers)
+                                CustomEmptyOverlay(
+                                    users = connectedUsers,
+                                    quiz = currentQuiz,
+                                    onClose = {
+                                        // Aquí cambias el estado que controla la visibilidad (normalmente el de la tecla 'E')
+                                        showCustomWindow = false
+                                        // O si usas el manager global:
+                                        showCustomWindowState.value = false
+                                    }
+                                )
                             }
                         }
                         LoadingOverlay(isLoading = isLoading)

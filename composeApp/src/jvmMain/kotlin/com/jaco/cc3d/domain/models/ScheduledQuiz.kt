@@ -7,7 +7,7 @@ data class ScheduledQuiz(
     val courseId: String,
     val quizTemplateId: String,
     val quizTitle: String = "",
-
+    val questions: List<QuizQuestion> = emptyList(),
     // Datos del examen
     val quizDate: String, // ISO8601 String para fácil manejo de fechas
     val details: String?,

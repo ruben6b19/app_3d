@@ -1,0 +1,28 @@
+name: Build Windows App
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  package:
+    runs-on: windows-latest # 🪟 Usamos una máquina virtual de Windows
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      # En Windows no es necesario el 'chmod +x', pero usamos gradlew.bat
+      - name: Crear instalador MSI
+        run: ./gradlew.bat packageMsi
+
+      - name: Guardar el instalador como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: CC3D-Windows-Installer
+          path: "**/build/compose/binaries/main/msi/*.msi"

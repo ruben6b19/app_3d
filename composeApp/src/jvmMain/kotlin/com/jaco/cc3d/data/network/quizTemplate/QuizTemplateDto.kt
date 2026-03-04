@@ -1,5 +1,6 @@
 package com.jaco.cc3d.data.network.quizTemplate
 
+import com.jaco.cc3d.data.network.quizQuestion.QuizQuestionDto
 import kotlinx.serialization.Serializable
 
 /**
@@ -15,5 +16,6 @@ data class QuizTemplateDto(
     val status: Int,
     val createdAt: String,
     val updatedAt: String,
-    val isAlreadyScheduled: Boolean = false
+    val isAlreadyScheduled: Boolean = false,
+    val questions: List<QuizQuestionDto>? = null,
 )

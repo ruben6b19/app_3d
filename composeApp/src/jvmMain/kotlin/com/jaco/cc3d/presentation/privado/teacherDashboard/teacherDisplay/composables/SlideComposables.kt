@@ -30,6 +30,7 @@ import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest // 👈 Esta es la que te falta
 import coil3.svg.SvgDecoder
+import com.jaco.cc3d.domain.models.ScheduledQuiz
 import com.jaco.cc3d.presentation.privado.teacherDashboard.teacherDisplay.manager.mainContentFontSizeState
 import com.jaco.cc3d.presentation.privado.teacherDashboard.teacherDisplay.manager.showCustomWindowState
 
@@ -41,7 +42,8 @@ fun SlideView(
     currentBibleFontSize: Float,
     selectedBibleId: String,
     texts: BibleDisplayStrings,
-    users: List<com.jaco.cc3d.data.network.Connection>?= null
+    users: List<com.jaco.cc3d.data.network.Connection>?= null,
+    quiz: ScheduledQuiz?= null
 ) {
     if (slide == null) {
         Box(
@@ -185,12 +187,18 @@ fun SlideView(
                 if (showCustomWindow) {
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth(0.35f) // Que ocupe un porcentaje de la pantalla
+                            .fillMaxWidth() // Que ocupe un porcentaje de la pantalla
                             .fillMaxHeight()
                             .align(Alignment.CenterEnd)
-                            .padding(bottom = 130.dp) // Margen inferior igual al de tu biblia
+                            .padding(10.dp) // Margen inferior igual al de tu biblia
                     ) {
-                        CustomEmptyOverlay(users = users ?: emptyList(),modifier = Modifier.fillMaxSize())
+                        CustomEmptyOverlay(users = users ?: emptyList(),modifier = Modifier.fillMaxSize(),
+                            quiz = quiz,
+                            onClose = {
+                                // Accionamos el cierre global del manager
+                                showCustomWindowState.value = false
+                            }
+                        )
                     }
                 }
             }
